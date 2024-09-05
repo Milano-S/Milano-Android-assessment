@@ -14,8 +14,8 @@ class AnswerCardView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : CardView(context, attrs, defStyleAttr) {
-    private val binding: ViewAnswerCardBinding =
-        ViewAnswerCardBinding.inflate(LayoutInflater.from(context), this)
+
+    private val binding: ViewAnswerCardBinding = ViewAnswerCardBinding.inflate(LayoutInflater.from(context), this)
     @ColorInt
     private val selectedCardBackgroundColor: Int
     @ColorInt
@@ -37,6 +37,7 @@ class AnswerCardView @JvmOverloads constructor(
         deselectedTextColor = whiteColour
         radius = resources.getDimension(R.dimen.corner_radius_normal)
         elevation = resources.getDimension(R.dimen.elevation_normal)
+
         setCardBackgroundColor(null)
     }
 

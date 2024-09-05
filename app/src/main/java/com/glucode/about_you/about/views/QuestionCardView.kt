@@ -1,9 +1,13 @@
 package com.glucode.about_you.about.views
 
+import android.app.ActionBar
 import android.content.Context
+import android.provider.CalendarContract.Colors
+import android.text.Layout
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
@@ -15,8 +19,8 @@ class QuestionCardView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : CardView(context, attrs, defStyleAttr) {
-    private val binding: ViewQuestionCardBinding =
-        ViewQuestionCardBinding.inflate(LayoutInflater.from(context), this)
+
+    private val binding: ViewQuestionCardBinding = ViewQuestionCardBinding.inflate(LayoutInflater.from(context), this)
 
     var title: String? = null
         set(value) {
@@ -50,6 +54,7 @@ class QuestionCardView @JvmOverloads constructor(
         val answerView = AnswerCardView(context)
         answerView.title = title
         answerView.setOnClickListener { onAnswerClick(it) }
+
         binding.answers.addView(answerView)
     }
 
