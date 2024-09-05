@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
@@ -20,7 +21,8 @@ class QuestionCardView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : CardView(context, attrs, defStyleAttr) {
 
-    private val binding: ViewQuestionCardBinding = ViewQuestionCardBinding.inflate(LayoutInflater.from(context), this)
+    private val binding: ViewQuestionCardBinding =
+        ViewQuestionCardBinding.inflate(LayoutInflater.from(context), this)
 
     var title: String? = null
         set(value) {
@@ -59,14 +61,23 @@ class QuestionCardView @JvmOverloads constructor(
     }
 
     private fun onAnswerClick(view: View) {
-        if (!view.isSelected) {
+
+        if (view.isSelected) {
             binding.answers.children.filter { it.isSelected }.forEach {
                 it.isSelected = false
             }
+        } else {
+           setSelection(view)
         }
+
     }
 
-    private fun setSelection() {
+    private fun setSelection(view: View) {
+        val nonSelectedAnswerIndex = binding.answers.children.indexOf(view)
+        binding.answers.children.apply {
+            forEach { it.isSelected = false }
+            elementAt(nonSelectedAnswerIndex).isSelected = true
+        }
 
     }
 }
