@@ -24,7 +24,7 @@ class EngineersFragment : Fragment() {
     ): View {
         binding = FragmentEngineersBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
-        setUpEngineersList(MockData.engineers)
+        setUpEngineersList(vm.engineerList.value ?: MockData.engineers)
         return binding.root
     }
 
@@ -42,6 +42,7 @@ class EngineersFragment : Fragment() {
 
     private fun setUpEngineersList(engineers: List<Engineer>) {
         binding.list.adapter = EngineersRecyclerViewAdapter(engineers) {
+            vm.setCurrentProfileImage(null)
             vm.setCurrentEngineer(it)
             goToAbout(it)
         }

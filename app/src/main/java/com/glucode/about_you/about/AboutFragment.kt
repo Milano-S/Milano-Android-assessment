@@ -1,6 +1,8 @@
 package com.glucode.about_you.about
 
-import android.nfc.Tag
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,7 +14,6 @@ import com.glucode.about_you.about.views.ProfileCardView
 import com.glucode.about_you.about.views.QuestionCardView
 import com.glucode.about_you.databinding.FragmentAboutBinding
 import com.glucode.about_you.engineers.models.Engineer
-import com.glucode.about_you.mockdata.MockData
 import com.glucode.about_you.viewmodel.AboutViewModel
 
 private const val TAG = "AboutFragment"
@@ -21,6 +22,7 @@ class AboutFragment : Fragment() {
 
     private lateinit var binding: FragmentAboutBinding
     private val vm: AboutViewModel by activityViewModels()
+    private lateinit var profileCardView: ProfileCardView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,9 +38,14 @@ class AboutFragment : Fragment() {
 
         val currentEngineer = vm.currentEngineer.value
         if (currentEngineer != null) {
-            Log.i(TAG, currentEngineer.name)
             setUpProfile(currentEngineer)
             setUpQuestions(currentEngineer)
+        }
+
+        vm.currentProfileImageUri.observe(viewLifecycleOwner) { uri ->
+            uri?.let {
+                profileCardView.setProfileImage(it)
+            }
         }
     }
 
@@ -54,9 +61,27 @@ class AboutFragment : Fragment() {
     }
 
     private fun setUpProfile(engineer: Engineer) {
-        val profileCardView = ProfileCardView(requireContext())
-        profileCardView.setEngineerDetails(engineer)
+        profileCardView = ProfileCardView(requireContext())
+        profileCardView.setEngineerDetails(engineer) {
+            try {
+                val intent = Intent(Intent.ACTION_GET_CONTENT)
+                intent.type = "image/*"
+                startActivityForResult(intent, 100)
+            } catch (e: Exception) {
+                Log.i(TAG, e.message.toString())
+            }
+        }
         binding.container.addView(profileCardView)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
+            val selectedImageUri: Uri? = data?.data
+            if (selectedImageUri != null) {
+                vm.setCurrentProfileImage(selectedImageUri)
+                Log.i(TAG, "Image set ${vm.currentProfileImageUri.value}")
+            }
+        }
+    }
 }
