@@ -3,15 +3,19 @@ package com.glucode.about_you.engineers
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.glucode.about_you.R
 import com.glucode.about_you.databinding.FragmentEngineersBinding
 import com.glucode.about_you.engineers.models.Engineer
 import com.glucode.about_you.mockdata.MockData
+import com.glucode.about_you.viewmodel.AboutViewModel
 
 class EngineersFragment : Fragment() {
+
     private lateinit var binding: FragmentEngineersBinding
+    private val vm : AboutViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +42,7 @@ class EngineersFragment : Fragment() {
 
     private fun setUpEngineersList(engineers: List<Engineer>) {
         binding.list.adapter = EngineersRecyclerViewAdapter(engineers) {
+            vm.setCurrentEngineer(it)
             goToAbout(it)
         }
         val dividerItemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
