@@ -42,7 +42,7 @@ class EngineersFragment : Fragment() {
 
     private fun setUpEngineersList(engineers: List<Engineer>) {
         binding.list.adapter = EngineersRecyclerViewAdapter(engineers) {
-            vm.setCurrentProfileImage(null)
+            vm.setCurrentProfileImage(null, null)
             vm.setCurrentEngineer(it)
             goToAbout(it)
         }

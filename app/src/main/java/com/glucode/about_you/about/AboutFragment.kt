@@ -42,9 +42,11 @@ class AboutFragment : Fragment() {
             setUpQuestions(currentEngineer)
         }
 
-        vm.currentProfileImageUri.observe(viewLifecycleOwner) { uri ->
-            uri?.let {
-                profileCardView.setProfileImage(it)
+        vm.currentProfileImageUri.observe(viewLifecycleOwner) { pair ->
+            pair?.let {
+                if (pair.second == vm.currentEngineer.value!!.name) {
+                    profileCardView.setProfileImage(it.first)
+                }
             }
         }
     }
@@ -79,7 +81,8 @@ class AboutFragment : Fragment() {
         if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
             val selectedImageUri: Uri? = data?.data
             if (selectedImageUri != null) {
-                vm.setCurrentProfileImage(selectedImageUri)
+                vm.setCurrentProfileImage(selectedImageUri, vm.currentEngineer.value!!.name)
+                vm.updateEngineerProfileImage(vm.currentEngineer.value!!, selectedImageUri)
                 Log.i(TAG, "Image set ${vm.currentProfileImageUri.value}")
             }
         }
