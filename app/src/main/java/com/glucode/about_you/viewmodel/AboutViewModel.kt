@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.glucode.about_you.engineers.models.Engineer
 import com.glucode.about_you.mockdata.MockData
-
 class AboutViewModel : ViewModel() {
 
     private var _currentEngineer = MutableLiveData<Engineer>()
@@ -15,7 +14,7 @@ class AboutViewModel : ViewModel() {
         _currentEngineer.value = engineer
     }
 
-    private var _engineerList = MutableLiveData(MockData.engineers)
+    var _engineerList = MutableLiveData(MockData.engineers)
     val engineerList: LiveData<List<Engineer>> = _engineerList
 
     private val _currentProfileImageUri = MutableLiveData<Pair<Uri, String>>()
@@ -25,7 +24,6 @@ class AboutViewModel : ViewModel() {
             _currentProfileImageUri.value = Pair(uri, name)
         }
     }
-
 
     fun updateEngineerProfileImage(engineer: Engineer, uri: Uri) {
         val updatedList = _engineerList.value?.map {
@@ -37,4 +35,19 @@ class AboutViewModel : ViewModel() {
         }
         _engineerList.value = updatedList
     }
+
+
+    fun sortEngineersByYears() {
+        _engineerList.value = _engineerList.value?.sortedBy { it.quickStats.years }
+    }
+
+    fun sortEngineersByCoffees() {
+        _engineerList.value = _engineerList.value?.sortedBy { it.quickStats.coffees }
+    }
+
+    fun sortEngineersByBugs() {
+        _engineerList.value = _engineerList.value?.sortedBy { it.quickStats.bugs }
+    }
+
 }
+
